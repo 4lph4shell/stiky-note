@@ -17,8 +17,17 @@ function getNotes() {
   return JSON.parse(localStorage.getItem('notes') || '[]')
 }
 
+/**
+ * Saves the given notes to local storage.
+ * @param {object[]} notes - An array of notes with an id and content.
+ */
 function saveNotes(notes) {
+  console.log('Saving notes to local storage')
+  console.log(notes)
+  // The JSON.stringify() method converts a JavaScript value to a JSON string.
+  // The localStorage.setItem() method sets the value of the specified key in local storage.
   localStorage.setItem('notes', JSON.stringify(notes))
+  console.log('Notes saved to local storage')
 }
 
 /**
@@ -52,22 +61,29 @@ function createNoteElement(id, content) {
   return noteElement
 }
 
+/**
+ * Adds a new note to the notes container and saves it to local storage.
+ */
 function addNote() {
   const notes = getNotes()
 
+  // Generate a random id for the new note.
+  // The id is used to identify the note in the notes array.
   const noteItem = {
     id: Math.floor(Math.random() * 100000),
     content: '',
   }
 
+  // Create a new note element based on the given id and content.
   const noteElement = createNoteElement(noteItem.id, noteItem.content)
+
+  // Insert the new note element before the add note button.
   notesContainer.insertBefore(noteElement, addNoteBtn)
 
+  // Add the new note to the notes array and save the notes to local storage.
   notes.push(noteItem)
   saveNotes(notes)
-}
-
-function updateNote(id, newContent) {
+}function updateNote(id, newContent) {
   const notes = getNotes()
 
   const updatedNote = notes.filter((item) => item.id === id)[0]
@@ -76,9 +92,21 @@ function updateNote(id, newContent) {
   saveNotes(notes)
 }
 
+/**
+ * Deletes a note from the notes container and removes it from local storage.
+ * @param {number} id - The id of the note to be deleted.
+ * @param {HTMLElement} element - The note element itself.
+ */
 function deleteNote(id, element) {
+  console.log(`The deleteNote function is called with id: ${id}`)
+
   const notes = getNotes().filter((item) => item.id != id)
 
+  // Save the updated notes array to local storage.
+  console.log('Saving the updated notes array to local storage')
   saveNotes(notes)
+
+  // Remove the note element from the notes container.
+  console.log('Removing the note element from the notes container')
   notesContainer.removeChild(element)
 }
